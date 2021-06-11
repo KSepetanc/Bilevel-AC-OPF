@@ -1,0 +1,149 @@
+param file symbolic = "typ\pglib_opf_case3_lmbd.xlsx";
+display file;
+set time ordered := setof {t in 1..24} "t" & t;
+set bus;
+set gen;
+set line;
+set loads;
+set shunt;
+set buspair within {bus,bus};
+set branch_from within {line,bus,bus};
+set branch_to within {line,bus,bus}= setof {(l,n,m) in branch_from} (l,m,n);
+set branch within {line,bus,bus} = branch_from union branch_to;
+set refbus within {bus};
+set bus_gen within {bus,gen};
+set bus_load within {bus,loads};
+set bus_shunt within {bus,shunt};
+param vmin {bus};
+param vmax {bus};
+param area {bus};
+param vm {bus};
+param va {bus};
+param pg_max {gen};
+param pg_min {gen};
+param qg_max {gen};
+param qg_min {gen};
+param c2 {gen};
+param c1 {gen};
+param c0 {gen};
+param bl {line};
+param gl {line};
+param bl_fr {line};
+param bl_to {line};
+param gl_fr {line};
+param gl_to {line};
+param Sl_max {line};
+param tap {line};
+param shift {line};
+param tr {line};
+param ti {line};
+param pd {loads};
+param qd {loads};
+param bs {shunt};
+param gs {shunt};
+param angmin {buspair};
+param angmax {buspair};
+param soe_max := 1;
+param soe0 := 0.5*soe_max;
+param ch_max := 0.6*soe_max;
+param dis_max := 0.6*soe_max;
+param eta_ch := 0.9;
+param eta_dis := 0.9;
+param penalty default 100;
+param lambda1es_param {time};
+param lambda1dn {time};
+param lambda1up {time};
+set be_set ordered := setof {be in 1..5} "be" & be;
+set un_set ordered := setof {un in 1..31} "un" & un;
+param be_max := 2^card(be_set)-1;
+param un_max := card(un_set);
+param load_f {time};
+param eps := 1e-3;
+display eps;
+set es_bus within bus default {"n3"};
+data;
+param load_f := t1  0.67, t2  0.63, t3  0.60, t4  0.59, t5  0.59, t6  0.60, t7  0.74, t8  0.86, t9  0.95, t10 0.96, t11 0.96, t12 0.95,
+				t13 0.95, t14 0.95, t15 0.93, t16 0.94, t17 0.99, t18 1.00, t19 1.00, t20 0.96, t21 0.91, t22 0.83, t23 0.73, t24 0.63;
+model;
+
+table Bus IN "amplxl" (file):
+	bus <- [n], vmin, vmax, area ,vm, va;
+	
+table Gen IN "amplxl" (file):
+	gen <- [g], pg_max, pg_min, qg_max ,qg_min, c2, c1, c0;
+	
+table Branch IN "amplxl" (file):
+	line <- [l], bl, gl, bl_fr, bl_to, gl_fr, gl_to, Sl_max, tap, shift;
+
+table Load IN "amplxl" (file):
+	loads <- [lo], pd, qd;
+	
+table Shunt IN "amplxl" (file):
+	shunt <- [sh], bs, gs;	
+	
+table Buspair IN "amplxl" (file):
+	buspair <- [n, m], angmax, angmin;
+	
+table Branch_from IN "amplxl" (file):
+	branch_from <- [l, n, m];
+	
+table Refbus IN "amplxl" (file):
+	refbus <- [n];
+	
+table Bus_gen IN "amplxl" (file):
+	bus_gen <- [n, g];	
+	
+table Bus_load IN "amplxl" (file):
+	bus_load <- [n, lo];
+	
+table Bus_shunt IN "amplxl" (file):
+	bus_shunt <- [n, sh];		
+	
+	
+load amplxl.dll;	
+read table Bus;
+read table Gen;
+read table Branch;
+read table Load;
+read table Shunt;
+read table Buspair;
+read table Branch_from;
+read table Refbus;
+read table Bus_gen;
+read table Bus_load;
+read table Bus_shunt;
+
+let {l in line} tr[l]:=tap[l]*cos(shift[l]);
+let {l in line} ti[l]:=tap[l]*sin(shift[l]);
+
+param qbat_fix {time} default 0;
+
+param Vt {time,bus}; param fit {time,bus};
+param cospsin {time,branch}; param cosmsin{time,branch};
+param vm1 {time, branch_from}; param vm2 {line}; param vm3 {time, branch_from};
+param Scond {time,branch};
+let {t in time, (l,n,m) in branch} Scond[t,l,n,m]:=1;
+
+param Ccond {time,buspair};
+param Vcond {time,branch_from};
+let {t in time, (n,m) in buspair} Ccond[t,n,m]:=1;
+let {t in time, (l,n,m) in branch_from} Vcond[t,l,n,m]:=1;
+
+param S_cond_share;
+param S_over_max;
+param S_at_max;
+param primal_value;
+param dual_value;
+param duality_gap_perc;
+param real_sys_cost;
+param claimed_profit;
+param real_profit;
+param LinCos;
+param LinVolt;
+param LinVoltGL;
+param CosError;
+param VoltError;
+
+
+
+

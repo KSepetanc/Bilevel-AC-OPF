@@ -1,0 +1,21 @@
+let {t in time, n in bus}               Vt[t,n] :=V[t,n];
+let {t in time, n in bus}               fit[t,n]:=fi[t,n];
+let {t in time, (l,n,m) in branch_from} cospsin[t,l,n,m]:=cos(fit[t,n]-fit[t,m]-shift[l])*gl[l]+sin(fit[t,n]-fit[t,m]-shift[l])*bl[l];
+let {t in time, (l,n,m) in branch_to}   cospsin[t,l,n,m]:=cos(fit[t,n]-fit[t,m]+shift[l])*gl[l]+sin(fit[t,n]-fit[t,m]+shift[l])*bl[l];
+let {t in time, (l,n,m) in branch_from} cosmsin[t,l,n,m]:=cos(fit[t,n]-fit[t,m]-shift[l])*bl[l]-sin(fit[t,n]-fit[t,m]-shift[l])*gl[l];
+let {t in time, (l,n,m) in branch_to}   cosmsin[t,l,n,m]:=cos(fit[t,n]-fit[t,m]+shift[l])*bl[l]-sin(fit[t,n]-fit[t,m]+shift[l])*gl[l];
+
+
+let {t in time, (l,n,m) in branch_from} vm1[t,l,n,m] := if gl[l] + gl_to[l]>0 then gl[l]*cos(fit[t,n]-fit[t,m]-shift[l])/sqrt(gl[l] + gl_to[l])/tap[l] else 0;
+let {l in line}                         vm2[l]       := sqrt(gl[l] + gl_to[l]);
+let {t in time, (l,n,m) in branch_from} vm3[t,l,n,m] := if gl[l] + gl_fr[l] > 0 then sqrt( ( (gl[l]*sin(fit[t,n]-fit[t,m]-shift[l]))^2 + gl[l]*(gl_fr[l]+gl_to[l]) + gl_fr[l]*gl_to[l] )/(gl[l] + gl_fr[l])) else 0;
+
+
+
+let {t in time, (l,n,m) in branch}      Scond[t,l,n,m]:= if P[t,l,n,m]^2+Q[t,l,n,m]^2>0.85*Sl_max[l]^2 then 1 else 0;
+
+
+
+
+
+

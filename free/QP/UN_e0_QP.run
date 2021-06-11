@@ -1,0 +1,33 @@
+include free\QP\presolve\init_presolve_qp.run;
+
+problem UN_e0_QP: dfi, dV, P, Q, Pgen, Qgen, cos_f, v_soa, cv1, cv2, cv3, v1, v2, v3, v4,
+		          bus_q_soa, power_f_soa, power_t_soa, reactive_f_soa, reactive_t_soa,
+		          linemax_soa, volt12_soa, pg12, qg12, refc_soa,
+		          cos0, cos1, cos2, cos3, cos00, v_soa0, v_soa1, v_soa2, v_soa3, v_soa4, v_soa00,
+		          lambda1,lambda2,lambda3,lambda4,lambda5,lambda6,lambda7,lambda11,lambda12,lambda13,lambda14,
+                  lambda15,lambda16,lambda17,lambda18,lambda19,lambda20,lambda21,lambda22,
+                  mi1max,mi1min,mi2max,mi2min,mi3max,mi3min,
+                  dual_dfi, dual_dV, dual_P, dual_Q, dual_Pgen, dual_Qgen, dual_cosf, dual_vsoa,
+                  dual_cone_cosf, dual_cone_vsoa, dual_cone_PQ,
+                  mi1maxc, mi1minc, mi2maxc, mi2minc, mi3maxc, mi3minc;
+model free\QP\components\UN_e0_QP.mod;
+
+include free\polar.run;
+
+
+include free\QP\presolve\presolve_qp.run;
+
+let {t in time, es in es_bus} lambda1up[t] := lambda1[t,es]+1000;
+let {t in time, es in es_bus} lambda1dn[t] := lambda1[t,es]-1000;
+
+printf "\n\n##########  Main Solve  ##########\n\n\n";
+problem UN_e0_QP;
+option solver xpressa;
+solve UN_e0_QP;
+
+include post_proc1.run;
+
+let {t in time} qbat_fix[t] := qbat[t];
+include free\polar.run;
+
+include post_proc2.run;

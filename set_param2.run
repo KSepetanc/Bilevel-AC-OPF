@@ -1,0 +1,2 @@
+let {t in time, (n,m) in buspair} Ccond[t,n,m] := if cos0_soa_n[t,n,m]<-1e-5 then 1 else 0;
+let {t in time, (l,n,m) in branch_from} Vcond[t,l,n,m] := if v_soa0_soa_n[t,l,n,m]>1e-5 and gl[l]>0 then 1 else 0;

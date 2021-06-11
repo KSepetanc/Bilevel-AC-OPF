@@ -1,0 +1,17 @@
+let real_sys_cost := sum {t in time, g in gen} (c2[g]*Pgen[t,g]^2 + c1[g]*Pgen[t,g] + c0[g]);
+
+let real_profit := sum {t in time, es in es_bus} -qbat_fix[t]*bus_p_pol[t,es];
+
+let LinCos := sum {t in time, (n,m) in buspair: not Ccond[t,n,m]} 1;
+let LinVolt := sum {t in time, (l,n,m) in branch_from: not Vcond[t,l,n,m]} 1;
+let LinVoltGL := sum {t in time, (l,n,m) in branch_from: not Vcond[t,l,n,m] and gl[l]>0} 1;
+
+let CosError := sum {t in time, (n,m) in buspair: Ccond[t,n,m]} if lambda16[t,n,m]>1e-4 then 0 else 1;
+let VoltError := sum {t in time, (l,n,m) in branch_from: Vcond[t,l,n,m]} if lambda20[t,l,n,m]>1e-4 then 0 else 1;
+
+printf "\n\n##########  End  ##########\n\n\n";
+
+display es_bus;
+
+
+display claimed_profit, real_profit, primal_value, dual_value,real_sys_cost,duality_gap_perc,CosError,VoltError,LinCos,LinVoltGL,S_cond_share, S_over_max, S_at_max;

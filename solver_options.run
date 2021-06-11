@@ -1,0 +1,3 @@
+option ipopt_options "linear_solver='MA27' linear_scaling_on_demand='no' linear_system_scaling='MC19'";
+option knitro_options "strat_warm_start=1 cpuplatform=4 outlev=0";
+option xpress_options 'maxtime=-1800 logfile="C:\Users\karlo\Desktop\xpressa.log"';

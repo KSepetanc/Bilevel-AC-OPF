@@ -1,0 +1,32 @@
+reset;
+reset options;
+include input_data.run;
+include solver_options.run;
+include free\ampl_options.run;
+
+model free\presolve_components\polar.mod;
+model free\presolve_components\nonconvex.mod;
+model free\presolve_components\primal_qp_socp.mod;
+model free\presolve_components\dual_qp.mod;
+
+problem Polar:   fi, V, P, Q, Pgen, Qgen, 
+			     QPOF, bus_p_pol, bus_q_pol, power_f_pol, power_t_pol, reactive_f_pol, reactive_t_pol,
+			     linemax_pol, volt12_pol, pg12, qg12, refc_pol;
+
+problem nonconvex:   dfi, dV, P, Q, Pgen, Qgen, cos_f, v_soa, 
+			         QPOF, bus_p_soa, bus_q_soa, power_f_soa, power_t_soa, reactive_f_soa, reactive_t_soa,
+			         linemax_soa, volt12_soa, pg12, qg12, refc_soa, 
+			         v_soa0_soa_n, cos0_soa_n;
+
+problem primal_qp_socp:   dfi, dV, P, Q, Pgen, Qgen, cos_f, v_soa, cv1, cv2, cv3, v1, v2, v3, v4,
+		                  QPOF, bus_p_soa, bus_q_soa, power_f_soa, power_t_soa, reactive_f_soa, reactive_t_soa,
+		                  linemax_soa, volt12_soa, pg12, qg12, refc_soa,
+		                  cos0, cos1, cos2, cos3, cos00, v_soa0, v_soa1, v_soa2, v_soa3, v_soa4, v_soa00;
+
+problem dual_qp:   lambda1,lambda2,lambda3,lambda4,lambda5,lambda6,lambda7,lambda11,lambda12,lambda13,lambda14,
+                   lambda15,lambda16,lambda17,lambda18,lambda19,lambda20,lambda21,lambda22,
+                   mi1max,mi1min,mi2max,mi2min,mi3max,mi3min,
+                   DualOFQP, dual_dfi, dual_dV, dual_P, dual_Q, dual_Pgen, dual_Qgen, dual_cosf, dual_vsoa,
+                   dual_cone_cosf, dual_cone_vsoa, dual_cone_PQ,
+                   mi1maxc, mi1minc, mi2maxc, mi2minc, mi3maxc, mi3minc;
+

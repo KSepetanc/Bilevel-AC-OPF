@@ -1,0 +1,29 @@
+#include free\QP\presolve\init_presolve_qp.run;
+
+#include free\polar.run;
+
+include set_param1.run;
+
+printf "\n\n##########  Nonconvex  ##########\n\n\n";
+problem nonconvex;
+option solver knitroa;
+solve nonconvex;
+
+
+include set_param2.run;
+
+printf "\n\n##########  Primal  ##########\n\n\n";
+problem primal_qp_socp;
+option solver xpressa;
+solve primal_qp_socp;
+
+printf "\n\n##########  Dual  ##########\n\n\n";
+problem dual_qp;
+option solver xpressa;
+solve dual_qp;
+
+#Resolve with knitro to achieve greater accuracy (Xpress is not accurate).
+
+option solver knitroa;
+option knitro_options "outlev=0";
+solve dual_qp;
