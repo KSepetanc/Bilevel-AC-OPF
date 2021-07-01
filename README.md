@@ -13,3 +13,5 @@ To run the code:
 	transmission network can be changed in "input_data.run"
 	
 In the path, i.e. folder name, "free" refers to variable bounds (they are +-Inf) while QP refers to the lower-level objective function treatment for derivng the dual.
+
+By default, KNITRO and Xpress solvers are used.
