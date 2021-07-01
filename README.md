@@ -1,6 +1,6 @@
 # Bilevel-AC-OPF
 
-This repository contains optimization code of the "Solving Bilevel AC OPF Problems UsingSmoothing Solution Techniques".
+This repository contains optimization code of the paper "Solving Bilevel AC OPF Problems Using Smoothing Solution Techniques".
 
 To run the code:
 
@@ -8,7 +8,7 @@ To run the code:
 	
 	Bilevel-AC-OPF folder should be project directory
 	
-	run free\QP\SM2_QP.run (other files in that directory solve using different solution techniques)
+	run free\QP\SM2.run (other files in that directory solve using different solution techniques)
 	
 	transmission network can be changed in "input_data.run"
 	
