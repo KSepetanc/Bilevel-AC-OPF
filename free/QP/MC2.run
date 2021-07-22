@@ -17,12 +17,13 @@ include free\polar.run;
 
 include free\QP\presolve\presolve_qp.run;
 
+#+-1000 is per 1 p.u. (that is 100 MW)
 let {t in time, es in es_bus} lambda1up[t] := lambda1[t,es]+1000;
 let {t in time, es in es_bus} lambda1dn[t] := lambda1[t,es]-1000;
 
 printf "\n\n##########  Main Solve  ##########\n\n\n";
 problem MC2_e0_QP;
-option solver xpressa;
+option solver xpress;
 solve MC2_e0_QP;
 display _solve_time;
 display _solve_elapsed_time;

@@ -23,7 +23,7 @@ include free\QP\presolve\presolve_qp.run;
 
 printf "\n\n##########  Main Solve  ##########\n\n\n";
 problem SM2_QP;
-option solver knitroa;
+option solver knitro;
 option knitro_options "outlev=2 strat_warm_start=1 cpuplatform=4 par_numthreads=8";
 
 solve SM2_QP;

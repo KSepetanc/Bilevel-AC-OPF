@@ -19,7 +19,7 @@ include free\QP\presolve\presolve_qp.run;
 
 printf "\n\n##########  Main Solve  ##########\n\n\n";
 problem SD_e_QP;
-option solver knitroa;
+option solver knitro;
 option knitro_options "strat_warm_start=1 cpuplatform=4 par_numthreads=8";
 solve SD_e_QP;
 

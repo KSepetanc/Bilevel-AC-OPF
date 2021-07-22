@@ -1,4 +1,4 @@
 printf "\n\n##########  Polar  ##########\n\n\n";
 problem Polar;
-option solver knitroa;
+option solver knitro;
 solve Polar;

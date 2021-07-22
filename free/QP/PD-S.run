@@ -19,7 +19,7 @@ include free\QP\presolve\presolve_qp.run;
 
 printf "\n\n##########  Main Solve  ##########\n\n\n";
 problem PD_c_QP;
-option solver xpressa;
+option solver xpress;
 solve PD_c_QP;
 display _solve_time;
 display _solve_elapsed_time;
