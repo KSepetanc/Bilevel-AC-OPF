@@ -10,7 +10,8 @@ subject to bus_p_soa {t in time, n in bus}:
 
 subject to bus_q_soa {t in time, n in bus}:
  sum {(n,g) in bus_gen} Qgen[t,g] - sum {(n,lo) in bus_load} qd[lo]*load_f[t] 
--sum {(l,n,m) in branch} Q[t,l,n,m] + sum{(n,sh) in bus_shunt} (Vt[t,n]^2+2*Vt[t,n]*dV[t,n])*bs[sh] = 0;
+-sum {(l,n,m) in branch} Q[t,l,n,m] + sum{(n,sh) in bus_shunt} (Vt[t,n]^2+2*Vt[t,n]*dV[t,n])*bs[sh] 
+- (if n in es_bus then qqbat_fix[t]) = 0;
 
 
 subject to power_f_soa {t in time, (l,n,m) in branch_from}:

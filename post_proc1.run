@@ -5,7 +5,7 @@ let S_at_max  :=  sum {t in time, (l,n,m) in branch} (if P[t,l,n,m]^2+Q[t,l,n,m]
 let primal_value:=  sum {t in time, g in gen} (c2[g]*Pgen[t,g]^2 + c1[g]*Pgen[t,g] + c0[g]);
 
 let dual_value  :=   
--sum {t in time, es in es_bus}							 qbat[t]*lambda1[t,es]
+-sum {t in time, es in es_bus}							 (qbat[t]*lambda1[t,es]+qqbat[t]*lambda2[t,es])
 -sum {t in time, g in gen: c2[g]>0}                      (c1[g]+mi1max[t,g]-mi1min[t,g]+sum{(n,g) in bus_gen} lambda1[t,n])^2/(4*c2[g])
 +sum {t in time, n in refbus}                            fit[t,n]*lambda7[t,n]
 +sum {t in time, g in gen}                               (c0[g]-pg_max[g]*mi1max[t,g]+pg_min[g]*mi1min[t,g]-qg_max[g]*mi2max[t,g]+qg_min[g]*mi2min[t,g])

@@ -1,4 +1,13 @@
 param file symbolic = "typ\pglib_opf_case3_lmbd.xlsx";
+#pglib_opf_case3_lmbd
+#pglib_opf_case5_pjm
+#pglib_opf_case14_ieee
+#pglib_opf_case24_ieee_rts
+#pglib_opf_case30_as
+#pglib_opf_case30_fsr
+#pglib_opf_case30_ieee
+#pglib_opf_case39_epri
+#pglib_opf_case57_ieee
 display file;
 set time ordered := setof {t in 1..24} "t" & t;
 set bus;
@@ -49,17 +58,18 @@ param ch_max := 0.6*soe_max;
 param dis_max := 0.6*soe_max;
 param eta_ch := 0.9;
 param eta_dis := 0.9;
-param penalty default 100;
+param penalty default 10;
 param lambda1es_param {time};
 param lambda1dn {time};
 param lambda1up {time};
+param lambda2dn {time};
+param lambda2up {time};
 set be_set ordered := setof {be in 1..5} "be" & be;
 set un_set ordered := setof {un in 1..31} "un" & un;
 param be_max := 2^card(be_set)-1;
 param un_max := card(un_set);
 param load_f {time};
-param eps := 1e-3;
-display eps;
+param eps default 0.5e-3;
 set es_bus within bus default {"n3"};
 data;
 param load_f := t1  0.67, t2  0.63, t3  0.60, t4  0.59, t5  0.59, t6  0.60, t7  0.74, t8  0.86, t9  0.95, t10 0.96, t11 0.96, t12 0.95,
@@ -117,6 +127,7 @@ let {l in line} tr[l]:=tap[l]*cos(shift[l]);
 let {l in line} ti[l]:=tap[l]*sin(shift[l]);
 
 param qbat_fix {time} default 0;
+param qqbat_fix {time} default 0;
 
 param Vt {time,bus}; param fit {time,bus};
 param cospsin {time,branch}; param cosmsin{time,branch};

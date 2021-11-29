@@ -2,6 +2,7 @@ var soe  {time} := soe0;
 var qch  {time};
 var qdis {time};
 var qbat {time};
+var qqbat {time};
 #var xch {time} binary;
 
 var cos_norm {t in time, (n,m) in buspair: Ccond[t,n,m]} = sqrt( (cv1[t,n,m]*cv3[t,n,m]+lambda14[t,n,m]*lambda16[t,n,m])^2 + (cv2[t,n,m]*cv3[t,n,m]+lambda15[t,n,m]*lambda16[t,n,m])^2 );
@@ -33,6 +34,10 @@ subject to soe_c3 {t in time}:
 subject to soe_c4 {t in time}:
  0 <= qdis[t] <= dis_max;
 
+
+subject to soe_c5 {t in time}:
+ qbat[t]^2 + qqbat[t]^2 <= ch_max^2;
+
 /*
 subject to soe_c3_1 {t in time}:
  0 <= qch [t];
@@ -45,11 +50,15 @@ subject to soe_c4_1 {t in time}:
 
 subject to soe_c4_2 {t in time}:
 	  qdis [t] <= dis_max*(1-xch[t]);
-*/	  
+*/
  
 subject to bus_p_soa_m {t in time, n in bus}:
  sum {(n,g) in bus_gen} Pgen[t,g] - sum {(n,lo) in bus_load} pd[lo]*load_f[t] -(if n in es_bus then qbat[t])
 -sum {(l,n,m) in branch} P[t,l,n,m] - sum{(n,sh) in bus_shunt} (Vt[t,n]^2+2*Vt[t,n]*dV[t,n])*gs[sh] = 0;
+
+subject to bus_q_soa_m {t in time, n in bus}:
+ sum {(n,g) in bus_gen} Qgen[t,g] - sum {(n,lo) in bus_load} qd[lo]*load_f[t] -(if n in es_bus then qqbat[t])
+-sum {(l,n,m) in branch} Q[t,l,n,m] + sum{(n,sh) in bus_shunt} (Vt[t,n]^2+2*Vt[t,n]*dV[t,n])*bs[sh] = 0;
 
 maximize UpQPOF: 
 -sum {t in time, g in gen} (c2[g]*Pgen[t,g]^2 + c1[g]*Pgen[t,g] + c0[g])

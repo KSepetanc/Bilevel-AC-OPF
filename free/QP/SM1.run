@@ -1,7 +1,7 @@
 include free\QP\presolve\init_presolve_qp.run;
 
 problem SM1_QP:   dfi, dV, P, Q, Pgen, Qgen, cos_f, v_soa, cv1, cv2, cv3, v1, v2, v3, v4,
-		          bus_q_soa, power_f_soa, power_t_soa, reactive_f_soa, reactive_t_soa,
+		          power_f_soa, power_t_soa, reactive_f_soa, reactive_t_soa,
 		          refc_soa,
 		          cos1, cos2, cos3, cos00, v_soa1, v_soa2, v_soa3, v_soa4, v_soa00,
 		          lambda1,lambda2,lambda3,lambda4,lambda5,lambda6,lambda7,lambda11,lambda12,lambda13,lambda14,
@@ -16,6 +16,7 @@ model free\QP\components\SM1_QP.mod;
 
 include free\polar.run;
 
+
 for {1..1} {
 
 
@@ -23,8 +24,13 @@ include free\QP\presolve\presolve_qp.run;
 
 printf "\n\n##########  Main Solve  ##########\n\n\n";
 problem SM1_QP;
+#ipopt
+#knitro
 option solver knitro;
 option knitro_options "outlev=2 strat_warm_start=1 cpuplatform=4 par_numthreads=8";
+
+#option knitro_options "outlev=2 bar_murule=5 strat_warm_start=1 cpuplatform=4 par_numthreads=16 par_msnumthreads=16 ms_enable=1 ms_startptrange=1.2 maxit=800 ms_maxsolves=16 infeastol=1e-10 feastol=1e-8 feastol_abs=1e-5 ms_outsub=0 strat_warm_start=1 cpuplatform=4 par_numthreads=16";
+#fix {t in time} qqbat[t] := 0;
 
 solve SM1_QP;
 
@@ -33,6 +39,7 @@ solve SM1_QP;
 include post_proc1.run;
 
 let {t in time} qbat_fix[t] := qbat[t];
+let {t in time} qqbat_fix[t] := qqbat[t];
 include free\polar.run;
 
 include post_proc2.run;
